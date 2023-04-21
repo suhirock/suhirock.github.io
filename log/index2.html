@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGデナシ - ページ2</title>
+    <link rel="stylesheet" href="style.css" media="screen">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/38547890?s=60&v=4">
+    <!-- highlight js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>LOGデナシ</h1>
+        <div class="version">ver.2 : 一日続いたらインクリメント</div>
+    </header>
+    
+    <!-- p10 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.20 12:00:05</time> thu.</div>
+        </dt>
+        <dd>
+            <h2>docker-composeでWordPressマルチサイト環境をローカルに作成したときにバージョンアップされる問題</h2>
+            <p>WordPressのローカル環境をversion5.7で作成した際に、管理画面にログインしてページ遷移した瞬間に6.2に更新されてしまう問題が発生しました。</p>
+            <p>こちらコアの自動アップグレードが効いてしまってるようでしたので、ymlに以下を追加すると解消されました。</p>
+            <pre>
+                <code class="language-yaml">
+WORDPRESS_CONFIG_EXTRA: |
+    define('WP_AUTO_UPDATE_CORE', false);
+    define('WP_ALLOW_MULTISITE', true);
+                </code>
+            </pre>
+        </dd>
+    </dl>
+
+    <!-- p9 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.20 07:42:41</time> thu.</div>
+            <div class="modified_at"><time>2023.04.20 09:39:10</time> thu.</div>
+        </dt>
+        <dd>
+            <h2>docker-composeでWordPressマルチサイト環境をローカルに作成する</h2>
+            <p>DockerでマルチサイトのWordPress環境をローカルに作成したかったので、chatGPTさんにdocker-compose.ymlを作成いただきました。</p>
+            <pre>
+                <code class="language-yaml">
+version: '3.9'
+
+services:
+    db:
+        container_name: my-mysql-container
+        image: mysql:5.7
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: example_root_password
+            MYSQL_DATABASE: example_database_name
+            MYSQL_USER: example_user_name
+            MYSQL_PASSWORD: example_user_password
+
+    wordpress:
+        container_name: my-wordpress-container
+        depends_on:
+            - db
+        image: wordpress:5.7.2-php7.4-apache
+        platform: linux/arm64/v8
+        ports:
+            - "8000:80"
+        restart: always
+        volumes:
+            - ./wp-content:/var/www/html/wp-content
+            - ./config:/var/www/html/wp-config.php
+            - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+        environment:
+            WORDPRESS_DB_HOST: my-mysql-container:3306
+            WORDPRESS_DB_NAME: example_database_name
+            WORDPRESS_DB_USER: example_user_name
+            WORDPRESS_DB_PASSWORD: example_user_password
+            WORDPRESS_CONFIG_EXTRA: |
+                /* Enable Multisite */
+                define('WP_ALLOW_MULTISITE', true);
+                
+                /* Multisite */
+                define('MULTISITE', true);
+                define('SUBDOMAIN_INSTALL', false);
+                define('DOMAIN_CURRENT_SITE', 'localhost:8000');
+                define('PATH_CURRENT_SITE', '/');
+                define('SITE_ID_CURRENT_SITE', 1);
+                define('BLOG_ID_CURRENT_SITE', 1);
+
+volumes:
+    db_data:
+                </code>
+            </pre>
+            <p>Error establishing a database connectionとなりました。なんでやねんですね。</p>
+            <p>やっていくうちに以下コードでローカルにマルチサイトしました。</p>
+            <pre>
+                <code class="language-yaml">
+version: '3.9'
+
+services:
+    db:
+        image: mysql:5.7
+        platform: linux/amd64
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: example_root_password
+            MYSQL_DATABASE: example_database_name
+            MYSQL_USER: example_user_name
+            MYSQL_PASSWORD: example_user_password
+
+    wordpress:
+        depends_on:
+            - db
+        image: wordpress:5.7.2
+        platform: linux/amd64
+        ports:
+            - '80:80'
+        restart: always
+        environment:
+            WORDPRESS_DB_HOST: db:3306
+            WORDPRESS_DB_USER: example_user_name
+            WORDPRESS_DB_PASSWORD: example_user_password
+            WORDPRESS_DB_NAME: example_database_name
+        volumes:
+            - ./html:/var/www/html/
+volumes:
+    db_data:
+                </code>
+            </pre>
+            <p>個人的にハマりポイントは以下でした</p>
+            <ul>
+                <li>M2 Macでは Platform パラメータを追加すべし。インストールがコケてしまうぞ！</li>
+                <li>DBのユーザ名を変更すると docker volume prune でボリュームのキャッシュを削除しないとデータベースに反映されないことがあるぞ！</li>
+                <li>マルチサイトを作成する場合はWordPressのポートを "80:80" にしよう！ドメインのポート番号が使用できないエラーがでてしまうぞ！</li>
+            </ul>
+        </dd>
+    </dl>
+
+    <!-- p8 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 23:11:24</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>WordPressのマルチサイトでユーザログイン履歴を取得したい</h2>
+            <p>表題のような要望がありました。なおかつ、有効化したいのは1つのサイトだけという条件がついておりました。</p>
+            <p>調べたところによると以下のようなプラグイン該当しました。</p>
+            <ul>
+                <li><a href="https://ja.wordpress.org/plugins/user-login-history/" target="_blank" rel="noopener">User Login History</a></li>
+                <li><a href="https://ja.wordpress.org/plugins/xo-security/" target="_blank" rel="noopener">XO Security</a></li>
+                <li><a href="https://ja.wordpress.org/plugins/all-in-one-wp-security-and-firewall/" target="_blank" rel="noopener">All-In-One Security (AIOS) – Security and Firewall</a></li>
+                <li><a href="https://ja.wordpress.org/plugins/wp-security-audit-log/" target="_blank" rel="noopener">WP Activity Log</a></a></li>
+            </ul>
+            <p>ただ、こちらチェックはできていないですが、サイト個別というよりはサイトネットワークで有効化しないといけない雰囲気です。</p>
+            <p>今は諸事情により試せないので、後でまたチェックするとします。</p>
+        </dd>
+    </dl>
+
+    <!-- p7 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 17:03:04</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>息を吐くようにテキストを書く</h2>
+            <p>私たちは忘れていく。そのことを忘れてはならない。</p>
+            <p>忘れたときに役に立つのはテキストだ！ドキュメントだ！メモ書きだ！</p>
+            <p>息を吐くようにテキストを書く癖をつければいつかきっと役に立つときが来るに違いない。</p>
+        </dd>
+    </dl>
+
+    <!-- p6 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 14:37:20</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>PHPのfilter_varは結構強力</h2>
+            <p>filter_varは特定の形でデータをフィルタリングしてくれるもので、その形式を知っていればかなり楽できる関数です。</p>
+            <p>というか知られているのかな？なんとなく、ググってみたら、細かいところまでは手が届かないがある程度形式の保証をしてくれるといった印象を僕は持ちました。</p>
+            <p>今回この関数を調べたのはWordPressのプラグイン「MW WP Form」内で使われていたからです。</p>
+            <p>もともとは「Data not accepted」みたいなエラーをPHPMailerで出したくて、mwform_auto_mail_raw_mw-wp-form-xxxのフィルターで$Mail_raw->from = "hoge"とかしてたわけですが、メールが正常に送信されますではないですか!</p>
+            <p>これの原因がfilter_varだったわけでして、プラグインで設定したfromのメールを送信前に検証していました。</p>
+            <p>おかしなFromだったら「デフォルトの送信元メールアドレス」を設定しており、正常送信されるようになるということになっておりました。</p>
+        </dd>
+    </dl>
+    
+    <!-- p5 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 13:29:27</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>クライムファミリーの2話をみた</h2>
+            <p>Tverでクライムファミリーの2話をみた。各所気になる部分はあるが、こういうドラマが大好物です。30分ドラマばっかり集めたサイトがあったら入り浸って見てしまうかも。</p>
+            <p>というか、Amazonが視聴時間の検索をつけないのはなんでなんだぜ？？</p>
+        </dd>
+    </dl>
+
+    <!-- p4 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 13:28:05</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>Google Bardのwaitlistを申請</h2>
+            <ol reversed>
+                <li>
+                    <p><time>2023.04.19 13:35:59</time> waitlistの返答がきたみたい。5分くらいで来るもんなんだなぁ、と思ったらwaitlistの登録の自動返信メールでした。あわわ。</p>
+                </li>
+                <li>
+                    <p>日本でもGoogle Bardのwait listへの登録ができるようになったのでやってみる。なんでも触ってみるのが大事だ。</p>
+                </li>
+            </ol>
+            
+        </dd>
+    </dl>
+
+    <!-- p3 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 11:05:33</time> wed.</div>
+            <div class="modified_at"><time>2023.04.19 11:20:57</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>すごく雨が降ってきた</h2>
+            <p>大阪は雨。釣りに行かなくてよかったと思う反面、気温も高いので、この雨は恵みの雨だとも思う。効果は後日わかるに違いない。</p>
+            <p>なお各所、釣果はまばらな模様。釣り人が少ないのか、はたまた、そんなに釣れていないだけなのか。というかローカルでなんも環境構築もなしにページ確認できるってサイコーだなと思った。</p>
+            <p>ちょっと興に乗ってきたので、ちょっとだけCSSをさわってみた。相変わらず文面に「ちょっと」が多いと思う。</p>
+        </dd>
+    </dl>
+
+    <!-- p2 -->
+    <dl class="item">
+        <dt>
+            <div class="created_at"><time>2023.04.19 10:54:43</time> wed.</div>
+            <div class="modified_at"><time>2023.04.19 11:34:11</time> wed.</div>
+        </dt>
+        <dd>
+            <h2>Playwrightのテストの最後で通知がしたかった</h2>
+            <ol reversed>
+                <li>
+                    <p>pnpm add -gでインストールしたが、notify -hが使えない。パスが通ってないか。</p>
+                    <p>というかこのリストでolのreversed属性を使って降順に番号振られるようにしているが、この属性初めてつかったかもしれん。</p>
+                </li>
+                <li>
+                    <p>テスト終わりでシステムの通知がほしかったので、node-notifierを使ってみたが、通知されなかった。</p>
+                    <p>アプローチを変えて、node-notifier-cliをpnpm add -gしてnpx playwirghtの後に実行されるようにしてみた。</p>
+                </li>
+            </ol>
+        </dd>
+    </dl>
+
+    <!-- p1 -->
+    <dl class="item">
+        <dt><time>2023.04.19 10:03.45</time> wed.</dt>
+        <dd>
+            <h2>ログをはじめました</h2>
+            <p>いつもログをサボって続かないのでHTMLでコツコツ書いてみることをする。</p>
+            <p>version1です。</p>
+        </dd>
+    </dl>
+
+    <a href="index.html">前のページ</a>
+
+    <footer>
+        <small>&copy;suhirock</small>
+    </footer>
+</body>
+</html>

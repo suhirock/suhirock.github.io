@@ -1,0 +1,22 @@
+/*
+* reset
+*/
+dl{
+    margin: 0;
+    padding: 0;
+}
+
+/*
+* add
+*/
+.created_at::before{
+    content: "作成日：";
+}
+.modified_at::before{
+    content: "更新日：";
+}
+.item{
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #ccc;
+}
