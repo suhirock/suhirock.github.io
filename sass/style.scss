@@ -9,6 +9,11 @@ dl {
 /*
 * add
 */
+.site-title{
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: .5rem;
+}
 .created_at::before{
     content: "作成日：";
 }
