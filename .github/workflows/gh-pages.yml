@@ -18,7 +18,7 @@ build:
         # Target branch
         PAGES_BRANCH: gh-pages
         # Build directory
-        BUILD_DIR: my_site
+        # BUILD_DIR: my_site
         # Provide personal access token
         TOKEN: ${{ secrets.TOKEN }}
         # Or if publishing to the same repo, use the automatic token
