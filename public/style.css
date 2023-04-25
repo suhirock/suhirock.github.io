@@ -1,1 +1,1 @@
-﻿dl{margin:0;padding:0}pre{padding:.5rem}.site-title{font-size:3.5rem;line-height:1;margin:.5rem 0}.created_at::before{content:"作成日："}.modified_at::before{content:"更新日："}.item{padding-top:3rem;padding-bottom:3rem;border-bottom:1px solid #ccc}.pagination{margin:2rem 0}
+﻿dl{margin:0;padding:0}pre{padding:.5rem;overflow:auto}img{max-width:100%}.site-title{font-size:3.5rem;line-height:1;margin:.5rem 0}.created_at::before{content:"作成日："}.modified_at::before{content:"更新日："}.item{padding-top:3rem;padding-bottom:3rem;border-bottom:1px solid #ccc}.pagination{margin:2rem 0}
