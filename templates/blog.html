@@ -14,8 +14,8 @@
       {% endif %}
     </dt>
     <dd>
-        <h2>{{ page.title }}</h2>
-        {{ page.content | safe }}
+        <h2><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h2>
+        {{ page.summary | safe }}
     </dd>
   </dl>
 {% endfor %}
