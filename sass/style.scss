@@ -12,6 +12,15 @@ pre{
 img{
     max-width: 100%;
 }
+body{
+    margin: 0;
+    padding: 3rem 5rem;
+}
+pre{
+    padding: 2rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+}
 
 /*
 * add
@@ -34,4 +43,11 @@ img{
 }
 .pagination{
     margin: 2rem 0;
+}
+
+.backlink{
+    margin-top: 5rem;
+}
+.footer-navi{
+    margin-top: 2rem;
 }

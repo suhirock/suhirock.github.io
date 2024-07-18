@@ -18,13 +18,15 @@
 <body>
     <header>
         <h1 class="site-title">LOGデナシ</h1>
-        <div class="version">ver.8{# 一日続いたらインクリメント #}</div>
+        <div class="version">ver.9{# 一日続いたらインクリメント #}</div>
     </header>
 
     {% block content %}
     {% endblock %}
 
-    <a href="{{ get_url(path='/') }}">TOP</a> | <a href="{{ get_url(path='@/blog/_index.md') }}">ログ</a> | <a href="{{ get_url(path='@/privacy/index.md') }}">プライバシー</a>
+    <div class="footer-navi">
+        <a href="{{ get_url(path='/') }}">TOP</a> | <a href="{{ get_url(path='@/blog/_index.md') }}">ログ</a> | <a href="{{ get_url(path='@/privacy/index.md') }}">プライバシー</a>
+    </div>
 
     <footer>
         <small>&copy;suhirock</small>
