@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwrightのテストの最後で通知がしたかった | LOGデナシ</title>
+    
+    <link rel="stylesheet" href="/style.css" media="screen">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/38547890?s=60&v=4">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN1RDH0627"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NN1RDH0627');
+    </script>
+</head>
+<body>
+    <header>
+        <h1 class="site-title">LOGデナシ</h1>
+        <div class="version">ver.10</div>
+    </header>
+
+    
+<br>
+<div class="created_at">
+<time>2023.04.19 10:54:43 Wed.</time>
+</div>
+
+<div class="modified_at">
+<time>2023.04.19 11:34:11 Wed.</time>
+</div>
+<br>
+
+<ol reversed>
+    <li>
+        <p>pnpm add -gでインストールしたが、notify -hが使えない。パスが通ってないか。</p>
+        <p>というかこのリストでolのreversed属性を使って降順に番号振られるようにしているが、この属性初めてつかったかもしれん。</p>
+    </li>
+    <li>
+        <p>テスト終わりでシステムの通知がほしかったので、node-notifierを使ってみたが、通知されなかった。</p>
+        <p>アプローチを変えて、node-notifier-cliをpnpm add -gしてnpx playwirghtの後に実行されるようにしてみた。</p>
+    </li>
+</ol>
+
+<div class="backlink">
+<a href="javascript:history.back();">前に戻る</a>
+</div>
+
+
+    <div class="footer-navi">
+        <a href="https://suhirock.github.io">TOP</a> | <a href="https://suhirock.github.io/blog/">ログ</a> | <a href="https://suhirock.github.io/privacy/">プライバシー</a>
+    </div>
+
+    <footer>
+        <small>&copy;suhirock</small>
+    </footer>
+</body>
+</html>

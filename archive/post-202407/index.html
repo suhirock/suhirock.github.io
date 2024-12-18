@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024-07 | LOGデナシ</title>
+    
+    <link rel="stylesheet" href="/style.css" media="screen">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/38547890?s=60&v=4">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN1RDH0627"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NN1RDH0627');
+    </script>
+</head>
+<body>
+    <header>
+        <h1 class="site-title">LOGデナシ</h1>
+        <div class="version">ver.10</div>
+    </header>
+
+    
+<br>
+<div class="created_at">
+<time>2024.07.16 01:35:05 Tue.</time>
+</div>
+
+<div class="modified_at">
+<time>2024.07.24 06:53:49 Wed.</time>
+</div>
+<br>
+
+<br>
+<p>なにも書いてない1年半だった。<br />
+再度書き始めて一体何を残そうというのか。</p>
+<br>
+<span id="continue-reading"></span>
+<hr />
+<h1 id="2024-07-28">2024-07-28</h1>
+<br>
+<h2 id="laravel-basicren-zheng-nituite">Laravel: Basic認証について</h2>
+<p>Basic認証をPHP側でかけるミドルウェアを２つ通過するとFormRequestが正常に動作しない現象があった。</p>
+<br>
+<h2 id="pariorinpituku">パリオリンピック</h2>
+<p>10:51:14</p>
+<p>2024年7月26日 パリオリンピックの開会式があった。</p>
+<p>開会式の一幕に、マリーアントワネットらしき首のない人物が生首を手に抱え、その生首が歌うという演出があった。<br />
+自分的にはコンプライアンスというものを無視してどんどんやっていってほしいと思うが、賛否両論あるようだ。<br />
+攻めるコンテンツというのは、人の心に踏み込む性質を持っていると思う。<br />
+それが受け入れられるものならば称賛し、受け入れられないものであれば、排除される。<br />
+身近な家族でさえ、長年の友人でさえ、受け入れられるものと受け入れられないもので、あーだこーだいうことがあるんだから、基本的には人間はわかりあえず、それでもわかり合おう、許容しようという姿勢が大事なのだと心底そう思う。</p>
+<p>自分的には演出はよかったと思う。<br />
+正直競技をもっと見ようという話ではあるが、、、</p>
+<br>
+<br>
+<br>
+<h1 id="2024-07-24">2024-07-24</h1>
+<br>
+<h2 id="laravelnonew-process">Laravelのnew Process</h2>
+<p>06:53:49</p>
+<p>LaravelではSymfonyの<a href="https://symfony.com/doc/current/components/process.html" target="_blank">Process Component</a>が使えるみたいです。</p>
+<p>機能が豊富ということで使ってみるのですが、こういったものは、結局使い切らずです。<br />
+実装などは興味があるので、また今度中身を覗いてみるかと思っています。</p>
+<p>スペースのカンマ区切りでコマンド実行する。</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>$process = new Process([&#39;ls&#39;, &#39;-lAFt&#39;]);
+</span></code></pre>
+<br>
+<br>
+<br>
+<h1 id="2024-07-22">2024-07-22</h1>
+<br>
+<h2 id="geometoryxing-nojian-suo-dedohamari">Geometory型の検索でドハマリ</h2>
+<p>06:48:12</p>
+<p>結論からいうとデータの移行の問題であった。</p>
+<p>Elquantの構文であーでもないこーでもないと座標に強くないのでこねくりまわしていたのだが、<br />
+sqlを直接叩いても取得できないことからgeometoryの値をST_AsTextなどをして旧データベースと比較したら　　
+あら不思議<br />
+POINTの値が全然ちがうやん<br />
+で同じmysqldumpで流し込みしてもエラーの再現はできず、旧データベースの値がそのまま入った。</p>
+<p>いったいなんの時間なんであったのだろう。</p>
+<br>
+<br>
+<h3 id="linestring">LINESTRING</h3>
+<p>複数の WKB Point 引数から WKB LineString 値を構築する。 引数のいずれかが WKB Point でない場合、戻り値は NULL です。 Point 引数の数が 2 未満の場合、戻り値は NULL である。<br />
+<a href="https://mariadb.com/kb/en/linestring/" target="_blank">LINESTRING</a>
+（WKB Point は Well known-binary : GIS関連 バイナリの空間割当データ形式）</p>
+<pre data-lang="sql" style="background-color:#2b303b;color:#c0c5ce;" class="language-sql "><code class="language-sql" data-lang="sql"><span style="color:#65737e;">#たとえば geom というカラムがあって geometory型 ならば、
+</span><span style="color:#b48ead;">SELECT</span><span> ST_AsText(geom) </span><span style="color:#b48ead;">FROM</span><span> table;
+</span><span style="color:#65737e;">#とかする
+</span></code></pre>
+<br>
+<br>
+<h3 id="st-astext">ST_AsText</h3>
+<p>ジオメトリーデータからWKT（Well known-text）フォーマットにしてテキストで返してくれるもの
+<a href="https://mariadb.com/kb/en/st_astext/" target="_blank">ST_AsText</a></p>
+<pre data-lang="sql" style="background-color:#2b303b;color:#c0c5ce;" class="language-sql "><code class="language-sql" data-lang="sql"><span style="color:#65737e;">#たとえば geom というカラムがあって geometory型 ならば、
+</span><span style="color:#b48ead;">SELECT</span><span> ST_AsText(geom) </span><span style="color:#b48ead;">FROM</span><span> table;
+</span><span style="color:#65737e;">#とかする
+</span></code></pre>
+<br>
+<br>
+<br>
+<h1 id="2024-07-20">2024-07-20</h1>
+<br>
+<h2 id="sassnochu-li-sutairukaracompactgaxiao-eteitajian">Sassの出力スタイルからcompactが消えていた件</h2>
+<p>18:55:32</p>
+<p>最新のLive Sass Compilerだとstyleでcompactが設定できなかった。<br />
+なのでコマンドラインから直接インストールして試してみたら、</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>sass input.scss:output.css --style compact
+</span></code></pre>
+<p>できなかった。</p>
+<p>ドキュメントを見ると、</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>This option (abbreviated -s) controls the output style of the resulting CSS. Dart Sass supports two output styles:
+</span><span>
+</span><span>expanded (the default) writes each selector and declaration on its own line.
+</span><span>compressed removes as many extra characters as possible, and writes the entire stylesheet on a single line.
+</span></code></pre>
+<p>と書いてあった。</p>
+<p>perplexityに「なぜ compact が削除されたかわかりますか？」と聞いてみた。<br />
+すると</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>標準化の問題：「compact」出力形式はSassの公式仕様の一部ではありませんでした。Sassの開発チームは、言語の標準化と一貫性を重視し、仕様に含まれていない機能を削除する決定をしたと考えられます。  
+</span><span>混乱の回避：ユーザーが独自の「compact」関数を定義している場合でも警告が表示されるという問題がありました。これにより、ユーザーの混乱を招く可能性がありました。  
+</span></code></pre>
+<p>というそれっぽい答えが返ってきた。</p>
+<p>なんでも知っているな、パーくんは。</p>
+<br>
+<br>
+<br>
+<h1 id="2024-07-20-1">2024-07-20</h1>
+<br>
+<h2 id="ls-lafno1fan-you-noasutarisuku">ls -lAFの１番右のアスタリスク</h2>
+<p>16:53:35</p>
+<p>実行可能なファイルのこと</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>-rwxr-xr-x@ 1 user  staff   681 Jul 12 18:37 deploy.sh* ←コレ
+</span></code></pre>
+<br>
+<br>
+<br>
+<h1 id="2024-07-18">2024-07-18</h1>
+<br>
+<h2 id="wu-shang-nishui-tamatuteirushi-jian">屋上に水たまっている事件</h2>
+<p>09:35:52</p>
+<p>屋上に水たまっていますよー<br />
+と、となりのとなりに施工しにきていた屋根の防水業者から昨日、教えてもらった。<br />
+灯台元暗しの反対だなと思い、perplexityに聞いてみたら、特に存在しないと教えてもらった。<br />
+ちょっと考えてみたが、「頭上のメガネを探す」というのが微妙なニュアンスで暫定1位となったが、納得はいっていない。<br />
+「頭上のメガネ」だけでもいいのかもしれない。</p>
+<br>
+<br>
+<br>
+<h1 id="2024-07-17">2024-07-17</h1>
+<br>
+<h2 id="laravelnopezinesiyonnokasutamaizuhage-tobi-yao">Laravelのページネーションのカスタマイズは割と必要</h2>
+<p>16:16:40</p>
+<p>スマホでページリンクの数を減らそうとおもったら割と計算しなければ実現しないことがわかった。
+といっても、参考にして</p>
+<br>
+<br>
+<br>
+<h2 id="shui-simogasi-tuteirutosi-uga-zui-jin-xnotou-gao-gahidoi">誰しもが思っていると思うが、最近Xの投稿がひどい</h2>
+<p>09:57:49</p>
+<br>
+<p>本当にインプレッションのみ狙ってきている投稿は、なんというか落書きや走り書きをみているよう。</p>
+<p>なんとかできないの？とは思うが、インターネットが一般化するとはまさにこのことなのだと思う。</p>
+<p>積極的に気分の悪くなるものや、違和感を感じるものからは、距離をとるという選択肢ができるのだから、率先して行うべきである。</p>
+<p>情報を受取ることに関しては、自分の行動を変えていくほうがよっぽど健全だと思うし、自然だと思う。</p>
+<p>ファミリーレストランでもりもりメガ盛りのメニューばかりしかないところにはいかなければいい話なのである。</p>
+<br>
+<br>
+<br>
+<h2 id="mariadb-mysql-deregexpdesql">MariaDB（MySQL）でREGEXPでSQL</h2>
+<p>09:38:03</p>
+<br>
+<p>/区切りのカラムをREGEXPで検索する場合にエスケープがバックスラッシュ2つというのは忘れそうだなと思いメモを残します。</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>SELECT `id`,`title` FROM `some_table` WHERE `target` REGEXP &#39;^example_word1\\/example_word2$&#39; ORDER BY `date` DESC;
+</span></code></pre>
+<p>そもそも/区切りのカラムというのをやめたほうがいいのではないかと自分に問う</p>
+<br>
+<br>
+<br>
+<h2 id="ji-xin-titupusunohua-ti">激辛チップスの話題</h2>
+<p>08:47:41</p>
+<p>高校生が14人激辛チップスで搬送された話。<br />
+辛いものが好きな自分は、ちょっとこのニュースで辛いものが制限されるのではないかという懸念がある。<br />
+確かに辛さの限度はあるとは思うが、今回の場合は注意書きがあったので、食った側というものに非があるような気がする。<br />
+ただ、注意書きを洒落ととらえていいのか、本気と捉えていいのか、その境界は受け取る側で開きがあるように感じる。<br />
+実際、自分もどちらかといえば、「いうてもやろー」という考えでいってしまう派なので、注意しないといけないかもしれないなと思いました。</p>
+<br>
+<br>
+<br>
+<h2 id="dkim-neutral">dkim=neutral</h2>
+<p>06:50:03</p>
+<p>これはDKIMが失敗しているわけではないが、成功しているわけでもない中途半端な状態
+何かしら設定がうまく行ってない場合やメールの送信の仕方に問題がある場合に出るようです。</p>
+<br>
+<br>
+<br>
+<h2 id="spf-softfailninatuteiru">spf=softfailになっている</h2>
+<p>06:46:13</p>
+<p>メールヘッダーを読む
+するとspf=softfailになっているのを確認した。</p>
+<p>これは、サーバーのSPFレコードに ~ を使った設定を行った場合にエラーが出たときに出るもののようで、まぁつまりエラーです。</p>
+<br>
+<br>
+<br>
+<hr />
+<h1 id="2024-07-16">2024-07-16</h1>
+<br>
+<h2 id="mariadbnorisutoa">mariadbのリストア</h2>
+<p>ローカルにインストールしたmysqlで mysql コマンドで mariadb もリストアできる
+だが、データベース作成までやろうと思ったら工夫が必要
+今回の場合は、sql自体がテーブル書き出し（構造 + データ）だったのでデータベースをつくるところから</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span># DB作成
+</span><span>mysql -u root -e &quot;CREATE DATABASE test_db&quot;
+</span><span>
+</span><span># リストア
+</span><span>mysql -u root test_db &lt; dump.sql
+</span></code></pre>
+<p>的な感じで実際にはパスワードを設定するがローカルで一旦パスワード設定なしで取り込めた。</p>
+<br>
+<br>
+<br>
+<h2 id="ls">ls</h2>
+<p>ファイルを時系列に並べてファイルサイズ、ファイル種類などを表示する
+自分のファイル一覧のお気に入りコマンド
+（llみたいな感じ）</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>ls -lAFt
+</span></code></pre>
+<br>
+<br>
+<br>
+<h2 id="chgrp">chgrp</h2>
+<p>12:07:05</p>
+<p>フォルダ内の権限グループを、中身のファイルも含めて変更する</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>chgrp -R 権限 フォルダ
+</span></code></pre>
+<br>
+<br>
+<br>
+<h2 id="crontab">crontab</h2>
+<p>11:57:30</p>
+<p>crontabの設定確認</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>crontab -l
+</span></code></pre>
+<br>
+<br>
+<br>
+<h2 id="jie-gou-waritoxin-zirarenai-nintendo-switchgaren-tian-tang-shi-dai-jiao-dai-siteinaihadozui-chang">結構わりと信じられない、Nintendo Switchが任天堂世代交代していないハード最長</h2>
+<p>11:42:00</p>
+<p>びびった。<br />
+ファミリーコンピュータ、略してファミコンよりも長いの？<br />
+こういうニュースを見て、時間の流れに疎くなっているという感想が一番先に来るのもなかなかに自分では衝撃。<br />
+おじさん真っ只中。</p>
+<br>
+<br>
+<br>
+<h2 id="workflowgadong-kanakunaru">workflowが動かなくなる</h2>
+<p>11:34:00</p>
+<p>Githubのworkflowが動かなくなっていたので、デバッグがてら更新</p>
+<p>ちゃんとメンテナンスできてないとこういうことになる</p>
+<p>修正してみたがskipされる</p>
+<p>なんでやと思ったら、github actionsのブランチ名がmasterではなくmainになっていたからっぽいので修正</p>
+<p>でもこけるのでなんでやとおもったらパーソナルトークンが消えているっぽい</p>
+<p>期限あったんでしたっけ？というわけでトークンを生成し直して、キーを再登録</p>
+<p>re-runしたらうまく構築された模様</p>
+<p>え、というか1時間もかかってしまったのか泣けてくる。</p>
+<br>
+<br>
+<br>
+<h2 id="siyomonaikotokaramemosurupi-wotuketesositematayameteikunoka">しょーもないことからメモする癖をつけてそしてまたやめていくのか</h2>
+<p>10:23:11</p>
+<p>とりあえず、今日はターミナルのコマンドを書いていく。</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span># 世界協定時刻で時間までを取得
+</span><span>date -u &quot;+%Y-%m-%dT%H:%M:%SZ&quot;
+</span><span>&gt; 2024-07-16T01:35:05Z
+</span></code></pre>
+<br>
+<br>
+<br>
+
+<div class="backlink">
+<a href="javascript:history.back();">前に戻る</a>
+</div>
+
+
+    <div class="footer-navi">
+        <a href="https://suhirock.github.io">TOP</a> | <a href="https://suhirock.github.io/blog/">ログ</a> | <a href="https://suhirock.github.io/privacy/">プライバシー</a>
+    </div>
+
+    <footer>
+        <small>&copy;suhirock</small>
+    </footer>
+</body>
+</html>
