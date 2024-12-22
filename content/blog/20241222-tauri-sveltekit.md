@@ -3,7 +3,7 @@ title = "TauriとSvelteKitでアプリをつくっている"
 description = "TauriとSvelteKitでアプリをつくっている"
 date = 2024-12-22 09:00:00
 slug = "tauri-sveltekit-20241222"
-draft = true
+draft = false
 +++
 
 TauriとSvelteKitでアプリを作っている。  
