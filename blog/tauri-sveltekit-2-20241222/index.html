@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SvelteKitからTauriへの通信 | LOGデナシ</title>
+    <meta name="description" content="SvelteKitからTauriへの通信">
+    <link rel="stylesheet" href="/style.css" media="screen">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/38547890?s=60&v=4">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN1RDH0627"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NN1RDH0627');
+    </script>
+</head>
+<body>
+    <header>
+        <h1 class="site-title">LOGデナシ</h1>
+        <div class="version">ver.10</div>
+    </header>
+
+    
+<br>
+<div class="created_at">
+<time>2024.12.27 08:45:00 Fri.</time>
+</div>
+
+<p>TauriとSvelteKitでアプリを作っている。<br />
+公式のquick startをやってみる。</p>
+<span id="continue-reading"></span>
+<hr />
+<br>
+<h2 id="meinpurosesudechu-li-wosasetakatutara-tauri-commanddeyaritaichu-li-woji-shu">メインプロセスで処理をさせたかったら、tauri::commandでやりたい処理を記述</h2>
+<p>tauri::commandという属性マクロを追加するとJavascriptと通信できるようになります。</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#65737e;">// 処理内容
+</span><span>#[</span><span style="color:#bf616a;">tauri</span><span>::</span><span style="color:#bf616a;">command</span><span>]
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">greet</span><span>(</span><span style="color:#bf616a;">name</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>) -&gt; String {
+</span><span>    format!(&quot;</span><span style="color:#a3be8c;">Hello, </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;">!</span><span>&quot;, name)
+</span><span>}
+</span></code></pre>
+<br>
+<h2 id="hurontoendokaranohu-bichu-siwokomandotoniu-duke">フロントエンドからの呼び出しをコマンドと紐づけ</h2>
+<p>フロントのJavascriptからの呼び出しをコマンドへ紐づけるために<br />
+invoke_handler<br />
+generate_handler![] マクロ
+を使います</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>  tauri::Builder::default()
+</span><span>    .</span><span style="color:#96b5b4;">invoke_handler</span><span>(tauri::generate_handler![greet])
+</span><span>    .</span><span style="color:#96b5b4;">run</span><span>(tauri::generate_context!())
+</span><span>    .</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">error while running tauri application</span><span>&quot;);
+</span><span>}
+</span></code></pre>
+<p>こちらでメインプロセスのコマンド整備は完了しました。</p>
+<br>
+<h2 id="hurontoendoce">フロントエンド側</h2>
+<p>フロントエンド側から通信のやり取りをするには、
+@tauri-apps/apiを使うと便利のようです。</p>
+<p>以下でインストールしておきます。</p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">pnpm</span><span> add @tauri-apps/api@1
+</span></code></pre>
+<p>あとはsvelteコンポーネントを作成するだけです。</p>
+<p>src/lib/Greet.svelte</p>
+<pre data-lang="svelte" style="background-color:#2b303b;color:#c0c5ce;" class="language-svelte "><code class="language-svelte" data-lang="svelte"><span>&lt;script&gt;
+</span><span>  import { invoke } from &#39;@tauri-apps/api/tauri&#39;
+</span><span>
+</span><span>  let name = &#39;&#39;
+</span><span>  let greetMsg = &#39;&#39;
+</span><span>
+</span><span>  async function greet() {
+</span><span>    greetMsg = await invoke(&#39;greet&#39;, { name })
+</span><span>  }
+</span><span>&lt;/script&gt;
+</span><span>
+</span><span>&lt;div&gt;
+</span><span>  &lt;input id=&quot;greet-input&quot; placeholder=&quot;Enter a name...&quot; bind:value=&quot;{name}&quot; /&gt;
+</span><span>  &lt;button on:click=&quot;{greet}&quot;&gt;Greet&lt;/button&gt;
+</span><span>  &lt;p&gt;{greetMsg}&lt;/p&gt;
+</span><span>&lt;/div&gt;
+</span></code></pre>
+<p>src/routes/+page.svelte</p>
+<pre data-lang="svelte" style="background-color:#2b303b;color:#c0c5ce;" class="language-svelte "><code class="language-svelte" data-lang="svelte"><span>&lt;script&gt;
+</span><span>  import Greet from &#39;../lib/Greet.svelte&#39;
+</span><span>&lt;/script&gt;
+</span><span>
+</span><span>&lt;h1&gt;Welcome to SvelteKit&lt;/h1&gt;
+</span><span>&lt;Greet /&gt;
+</span></code></pre>
+<p>こちらで公式</p>
+<br>
+<br>
+取り急ぎ、共有まで。   
+
+
+<div class="backlink">
+<a href="javascript:history.back();">前に戻る</a>
+</div>
+
+
+    <div class="footer-navi">
+        <a href="https://suhirock.github.io">TOP</a> | <a href="https://suhirock.github.io/blog/">ログ</a> | <a href="https://suhirock.github.io/privacy/">プライバシー</a>
+    </div>
+
+    <footer>
+        <small>&copy;suhirock</small>
+    </footer>
+</body>
+</html>

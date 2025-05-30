@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiperでドットインジケーターをローディング仕様にしたい | LOGデナシ</title>
+    <meta name="description" content="Swiperでドットインジケーターをローディング仕様にしたい">
+    <link rel="stylesheet" href="/style.css" media="screen">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/38547890?s=60&v=4">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN1RDH0627"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NN1RDH0627');
+    </script>
+</head>
+<body>
+    <header>
+        <h1 class="site-title">LOGデナシ</h1>
+        <div class="version">ver.10</div>
+    </header>
+
+    
+<br>
+<div class="created_at">
+<time>2024.12.15 17:40:00 Sun.</time>
+</div>
+
+<p>スライダーライブラリのswiperを使って、<br />
+ドットインジケーター上で現在表示中のスライドのドットインジケーターに<br />
+次のスライドまでのインターバルタイムをプログレスバーとして表示する<br />
+というのをやりたかったのです。</p>
+<span id="continue-reading"></span>
+<hr />
+<br>
+<h2 id="ji-ben-kodo">基本コード</h2>
+<p>最小限のサンプルです。<br />
+CDNを利用しています。</p>
+<p>やっていることは、CSSを変更している程度のものです。</p>
+<pre data-lang="html" style="background-color:#2b303b;color:#c0c5ce;" class="language-html "><code class="language-html" data-lang="html"><span>&lt;</span><span style="color:#bf616a;">style</span><span>&gt;
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper </span><span>{
+</span><span>        width: </span><span style="color:#d08770;">100%</span><span>;
+</span><span>        height: </span><span style="color:#d08770;">300px</span><span>;
+</span><span>        position: relative;
+</span><span>        border: </span><span style="color:#d08770;">1px </span><span>solid </span><span style="color:#96b5b4;">#ccc</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper-slide </span><span style="color:#bf616a;">span </span><span>{
+</span><span>        text-align: center;
+</span><span>        font-size: </span><span style="color:#d08770;">18px</span><span>;
+</span><span>        background: </span><span style="color:#96b5b4;">#fff</span><span>;
+</span><span>        display: flex;
+</span><span>        justify-content: center;
+</span><span>        align-items: center;
+</span><span>        height: </span><span style="color:#d08770;">100%</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper-slide </span><span style="color:#bf616a;">img </span><span>{
+</span><span>    display: block;
+</span><span>    width: </span><span style="color:#d08770;">100%</span><span>;
+</span><span>    height: </span><span style="color:#d08770;">100%</span><span>;
+</span><span>    object-fit: cover;
+</span><span>    }
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper-pagination-bullet</span><span>{
+</span><span>        transition: width </span><span style="color:#d08770;">.3s </span><span>ease;
+</span><span>        opacity: </span><span style="color:#d08770;">1</span><span>;
+</span><span>        background-color: </span><span style="color:#96b5b4;">#cccccc</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper-pagination-bullet-active</span><span>{
+</span><span>        position: relative;
+</span><span>        background-color: </span><span style="color:#96b5b4;">#cccccc</span><span>;
+</span><span>        width: </span><span style="color:#d08770;">5%</span><span>;
+</span><span>        border-radius: </span><span style="color:#d08770;">10px</span><span>;
+</span><span>        
+</span><span>    }
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper-pagination-bullet</span><span style="color:#8fa1b3;">::</span><span style="color:#b48ead;">after</span><span>{
+</span><span>        content: &#39;&#39;;
+</span><span>        display: block;
+</span><span>        position: absolute;
+</span><span>        z-index: </span><span style="color:#d08770;">1</span><span>;
+</span><span>        width: </span><span style="color:#d08770;">0</span><span>;
+</span><span>        height: </span><span style="color:#d08770;">100%</span><span>;
+</span><span>        background-color: blue;
+</span><span>        border-radius: </span><span style="color:#d08770;">10px</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper </span><span style="color:#8fa1b3;">.</span><span style="color:#d08770;">swiper-pagination-bullet-active</span><span style="color:#8fa1b3;">::</span><span style="color:#b48ead;">after</span><span>{
+</span><span>        animation: dotProgress </span><span style="color:#d08770;">5s </span><span>linear forwards;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">@keyframes </span><span>dotProgress {
+</span><span>        </span><span style="color:#d08770;">0% </span><span>{
+</span><span>          width: </span><span style="color:#d08770;">0</span><span>;
+</span><span>        }
+</span><span>      
+</span><span>        </span><span style="color:#d08770;">100% </span><span>{
+</span><span>            width: </span><span style="color:#d08770;">100%</span><span>;
+</span><span>        }
+</span><span>      }
+</span><span>&lt;/</span><span style="color:#bf616a;">style</span><span>&gt;
+</span><span>&lt;</span><span style="color:#bf616a;">script </span><span style="color:#d08770;">src</span><span>=&quot;</span><span style="color:#a3be8c;">https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js</span><span>&quot;&gt;&lt;/</span><span style="color:#bf616a;">script</span><span>&gt;
+</span><span>&lt;</span><span style="color:#bf616a;">link </span><span style="color:#d08770;">rel</span><span>=&quot;</span><span style="color:#a3be8c;">stylesheet</span><span>&quot; </span><span style="color:#d08770;">href</span><span>=&quot;</span><span style="color:#a3be8c;">https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css</span><span>&quot; /&gt;
+</span><span>&lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper</span><span>&quot;&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-wrapper</span><span>&quot;&gt;
+</span><span>        &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-slide</span><span>&quot;&gt;&lt;</span><span style="color:#bf616a;">span</span><span>&gt;slide1&lt;/</span><span style="color:#bf616a;">span</span><span>&gt;&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>        &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-slide</span><span>&quot;&gt;&lt;</span><span style="color:#bf616a;">span</span><span>&gt;slide2&lt;/</span><span style="color:#bf616a;">span</span><span>&gt;&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>        &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-slide</span><span>&quot;&gt;&lt;</span><span style="color:#bf616a;">span</span><span>&gt;slide3&lt;/</span><span style="color:#bf616a;">span</span><span>&gt;&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>    &lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-pagination</span><span>&quot;&gt;&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-button-prev</span><span>&quot;&gt;&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>    &lt;</span><span style="color:#bf616a;">div </span><span style="color:#d08770;">class</span><span>=&quot;</span><span style="color:#a3be8c;">swiper-button-next</span><span>&quot;&gt;&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>&lt;/</span><span style="color:#bf616a;">div</span><span>&gt;
+</span><span>&lt;</span><span style="color:#bf616a;">script</span><span>&gt;
+</span><span>    </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">swiper </span><span>= new </span><span style="color:#bf616a;">Swiper</span><span>(&quot;</span><span style="color:#a3be8c;">.swiper</span><span>&quot;, {
+</span><span>        loop: </span><span style="color:#d08770;">true</span><span>,
+</span><span>        speed: </span><span style="color:#d08770;">500</span><span>,
+</span><span>        autoplay: {
+</span><span>            delay: </span><span style="color:#d08770;">5000</span><span>,
+</span><span>            disableOnInteraction: </span><span style="color:#d08770;">false</span><span>,
+</span><span>        },
+</span><span>        pagination: {
+</span><span>          el: &quot;</span><span style="color:#a3be8c;">.swiper-pagination</span><span>&quot;,
+</span><span>          clickable: </span><span style="color:#d08770;">true</span><span>,
+</span><span>          </span><span style="color:#8fa1b3;">renderBullet</span><span>: </span><span style="color:#b48ead;">function </span><span>(index, className) {
+</span><span>                </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">num </span><span>= </span><span style="color:#bf616a;">index </span><span>+ </span><span style="color:#d08770;">1</span><span>;
+</span><span>                </span><span style="color:#b48ead;">return </span><span>(
+</span><span>                    &#39;</span><span style="color:#a3be8c;">&lt;div class=&quot;</span><span>&#39; + </span><span style="color:#bf616a;">className </span><span>+ &#39;</span><span style="color:#a3be8c;"> circle-pagination</span><span>&#39; + &#39;</span><span style="color:#a3be8c;">&quot;&gt;&lt;div class=&quot;circle-pagination_inner&quot;&gt;&lt;/div&gt;&lt;/div&gt;</span><span>&#39;
+</span><span>                )
+</span><span>            },
+</span><span>        },
+</span><span>        on: {
+</span><span>            </span><span style="color:#8fa1b3;">slideChange</span><span>: </span><span style="color:#b48ead;">function </span><span>() {
+</span><span>                </span><span style="color:#b48ead;">if </span><span>(</span><span style="color:#bf616a;">this</span><span>.realIndex &gt; </span><span style="color:#d08770;">0</span><span>) {
+</span><span>                    </span><span style="color:#bf616a;">this</span><span>.params.autoplay.delay = </span><span style="color:#d08770;">4500</span><span>;
+</span><span>                }
+</span><span>            },
+</span><span>        },
+</span><span>        navigation: {
+</span><span>          nextEl: &quot;</span><span style="color:#a3be8c;">.swiper-button-next</span><span>&quot;,
+</span><span>          prevEl: &quot;</span><span style="color:#a3be8c;">.swiper-button-prev</span><span>&quot;,
+</span><span>        },
+</span><span>      });
+</span><span>&lt;/</span><span style="color:#bf616a;">script</span><span>&gt;
+</span></code></pre>
+<br>
+<h2 id="shi-ji-nobiao-shi">実際の表示</h2>
+<style>
+    .swiper {
+        width: 100%;
+        height: 300px;
+        position: relative;
+        border: 1px solid #ccc;
+    }
+    .swiper-slide span {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+    .swiper .swiper-pagination-bullet{
+        transition: width .3s ease;
+        opacity: 1;
+        background-color: #cccccc;
+    }
+    .swiper .swiper-pagination-bullet-active{
+        position: relative;
+        background-color: #cccccc;
+        width: 5%;
+        border-radius: 10px;
+        
+    }
+    .swiper .swiper-pagination-bullet::after{
+        content: '';
+        display: block;
+        position: absolute;
+        z-index: 1;
+        width: 0;
+        height: 100%;
+        background-color: blue;
+        border-radius: 10px;
+    }
+    .swiper .swiper-pagination-bullet-active::after{
+        animation: dotProgress 5s linear forwards;
+    }
+
+    @keyframes dotProgress {
+        0% {
+          width: 0;
+        }
+      
+        100% {
+            width: 100%;
+        }
+      }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<div class="swiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide"><span>slide1</span></div>
+        <div class="swiper-slide"><span>slide2</span></div>
+        <div class="swiper-slide"><span>slide3</span></div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>
+<script>
+    const swiper = new Swiper(".swiper", {
+        loop: true,
+        speed: 500,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          renderBullet: function (index, className) {
+                let num = index + 1;
+                return (
+                    '<div class="' + className + ' circle-pagination' + '"><div class="circle-pagination_inner"></div></div>'
+                )
+            },
+        },
+        on: {
+            slideChange: function () {
+                if (this.realIndex > 0) {
+                    this.params.autoplay.delay = 4500;
+                }
+            },
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+</script><br>
+<h2 id="can-kao-nisitasaito">参考にしたサイト</h2>
+<p>ほぼこちらの素晴らしい記事のやっていることのクローンなので、是非ご参考ください。　　</p>
+<p><a href="https://vool.jp/swiper-circle-pagination/" target="_blank">Swiperのページネーションにサークルアニメーションを実装する方法</a>　　</p>
+<br>
+取り急ぎ、共有まで。   
+
+
+<div class="backlink">
+<a href="javascript:history.back();">前に戻る</a>
+</div>
+
+
+    <div class="footer-navi">
+        <a href="https://suhirock.github.io">TOP</a> | <a href="https://suhirock.github.io/blog/">ログ</a> | <a href="https://suhirock.github.io/privacy/">プライバシー</a>
+    </div>
+
+    <footer>
+        <small>&copy;suhirock</small>
+    </footer>
+</body>
+</html>

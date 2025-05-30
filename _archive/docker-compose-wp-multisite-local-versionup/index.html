@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>docker-composeでWordPressマルチサイト環境をローカルに作成したときにバージョンアップされる問題 | LOGデナシ</title>
+    
+    <link rel="stylesheet" href="/style.css" media="screen">
+    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/38547890?s=60&v=4">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN1RDH0627"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NN1RDH0627');
+    </script>
+</head>
+<body>
+    <header>
+        <h1 class="site-title">LOGデナシ</h1>
+        <div class="version">ver.10</div>
+    </header>
+
+    
+<br>
+<div class="created_at">
+<time>2023.04.20 12:00:05 Thu.</time>
+</div>
+
+<p>ordPressのローカル環境をversion5.7で作成した際に、管理画面にログインしてページ遷移した瞬間に6.2に更新されてしまう問題が発生しました。<br />
+こちらコアの自動アップグレードが効いてしまってるようでしたので、ymlに以下を追加すると解消されました。</p>
+<pre data-lang="yaml" style="background-color:#2b303b;color:#c0c5ce;" class="language-yaml "><code class="language-yaml" data-lang="yaml"><span style="color:#bf616a;">WORDPRESS_CONFIG_EXTRA</span><span>: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">    define(&#39;WP_AUTO_UPDATE_CORE&#39;, false);
+</span><span style="color:#a3be8c;">    define(&#39;WP_ALLOW_MULTISITE&#39;, true);
+</span></code></pre>
+
+
+<div class="backlink">
+<a href="javascript:history.back();">前に戻る</a>
+</div>
+
+
+    <div class="footer-navi">
+        <a href="https://suhirock.github.io">TOP</a> | <a href="https://suhirock.github.io/blog/">ログ</a> | <a href="https://suhirock.github.io/privacy/">プライバシー</a>
+    </div>
+
+    <footer>
+        <small>&copy;suhirock</small>
+    </footer>
+</body>
+</html>
