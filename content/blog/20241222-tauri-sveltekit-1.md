@@ -1,12 +1,13 @@
 +++
-title = "TauriとSvelteKitでアプリをつくっている"
-description = "TauriとSvelteKitでアプリをつくっている"
+title = "TauriとSvelteKitでアプリをつくっています"
+description = "TauriとSvelteKitでアプリをつくっています"
 date = 2024-12-22 09:00:00
 slug = "tauri-sveltekit-20241222"
 draft = false
 +++
 
-TauriとSvelteKitでアプリを作っている。  
+TauriとSvelteKitでアプリを作っています。  
+公式のquick startをやってみています。  
 
 <!--more-->
 
