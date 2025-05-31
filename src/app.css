@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+
+html{
+    font-size: 10px;
+}
+body{
+    padding: 5rem;
+    font-size: 1.8rem;
+}
+a{
+    color: green;
+    text-decoration: underline;
+}
+a:hover{
+    text-decoration: none;
+}
