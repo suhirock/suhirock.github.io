@@ -1,12 +1,10 @@
-export type Category = string
-export type Tag = string
+export type Categories = 'sveltekit' | 'svelte'
 
 export type Post = {
     title: string,
     slug: string,
     description: string,
     date: string,
-    categories: Category[],
-    tags: Tag[],
+    categories: Categories[],
     published: boolean,
 }
