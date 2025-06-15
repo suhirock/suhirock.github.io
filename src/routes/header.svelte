@@ -1,12 +1,13 @@
 <script lang="ts">
 	import * as config from '$lib/config'
+	import { base } from '$app/paths'
 </script>
 
 <h1>LOGデナシ</h1>
 
 <nav>
-<a href="/">Home</a>
-<a href="/blog">Blog</a>
+<a href="{base}/">Home</a>
+<a href="{base}/blog">Blog</a>
 </nav>
 
 <style>

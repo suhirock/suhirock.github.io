@@ -1,5 +1,7 @@
-<script lang="ts">import { formatDate } from "$lib/utils";
-export let data;
+<script lang="ts">
+import { formatDate } from "$lib/utils"
+import { base } from '$app/paths'
+export let data
 </script>
 
 <svelte:head>
@@ -19,7 +21,7 @@ export let data;
   <div class="tags flex flex-wrap gap-2 mb-4 mt-10">
     {#each data.meta.tags as tag}
       <a
-        href={`/tags/${tag}`}
+        href={`${base}/tags/${tag}`}
         class="bg-white text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-white border border-gray-500"
         >&num;{tag}</a
       >

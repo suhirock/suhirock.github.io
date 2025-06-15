@@ -1,7 +1,6 @@
 import { error } from '@sveltejs/kit'
 
 export async function load({ params }) {
-  console.log(params.slug)
   try {
     const post = await import(`../../../../../posts/${params.year}/${params.month}/${params.slug}.md`)
     return {
