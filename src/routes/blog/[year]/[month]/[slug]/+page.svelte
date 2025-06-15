@@ -8,14 +8,15 @@ export let data;
   <meta property="og:title" content={data.meta.title} />
 </svelte:head>
 
-<article>
+<article class="mt-20">
   <hgroup>
-    <h1 class="text-3xl font-bold mb-4 flex gap-4 items-baseline">
-      {data.meta.title}<small class="text-sm text-gray-500">{formatDate(data.meta.date)}</small>
+    <h1 class="text-5xl font-bold mb-4 flex gap-4 items-baseline">
+      {data.meta.title}
     </h1>
+    <small class="text-lx">{formatDate(data.meta.date)}</small>
   </hgroup>
 
-  <div class="tags flex flex-wrap gap-2 mb-4">
+  <div class="tags flex flex-wrap gap-2 mb-4 mt-10">
     {#each data.meta.tags as tag}
       <a
         href={`/tags/${tag}`}
