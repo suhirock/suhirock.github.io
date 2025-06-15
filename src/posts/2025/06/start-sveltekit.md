@@ -9,4 +9,3 @@ published: true
 ---
 
 SvelteKitになれる必要があったので、SvelteKitでBlogをやり直しています。
-

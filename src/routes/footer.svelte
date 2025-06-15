@@ -2,7 +2,7 @@
 	import * as config from '$lib/config'
 </script>
 
-<footer>
+<footer class="mt-10">
 	<p>{config.title} &copy {new Date().getFullYear()}</p>
 </footer>
 
