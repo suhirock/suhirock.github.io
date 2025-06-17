@@ -1,5 +1,6 @@
 <script lang="ts">
 import { formatDate, getDate, getMonth, getYear } from "$lib/utils"
+import BlogYears from "$lib/components/BlogYears.svelte";
 import * as config from "$lib/config"
 import { base } from '$app/paths'
 export let data
@@ -28,3 +29,5 @@ export let data
     {/each}
   </ul>
 </section>
+
+<BlogYears />

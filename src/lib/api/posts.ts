@@ -29,3 +29,17 @@ export async function getPosts(year?: string) {
 
     return posts;
 }
+
+
+export function getYears() {
+  // posts配下の全マークダウンファイルを取得
+  const files = import.meta.glob('/src/posts/**/*.md', { eager: true });
+  // ファイルパスから年を抽出
+  const years = new Set<string>();
+  for (const path of Object.keys(files)) {
+    const match = path.match(/\/posts\/(\d{4})\//);
+    if (match) years.add(match[1]);
+  }
+  // 年の降順で返す
+  return Array.from(years).sort((a, b) => Number(b) - Number(a));
+}
