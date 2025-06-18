@@ -28,7 +28,16 @@ export let data
     {/each}
   </div>
 
-  <div class="prose max-w-full">
+  <div class="postBody max-w-full leading-15">
     <svelte:component this={data.content} />
   </div>
 </article>
+
+<style>
+  :global(.postBody h2){
+    font-size: 2.3rem;
+    font-weight: bold;
+    line-height: 2;
+    margin-bottom: 2rem;
+  }
+</style>

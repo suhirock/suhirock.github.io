@@ -30,7 +30,10 @@ export async function getPosts(year?: string) {
     return posts;
 }
 
-
+/**
+ * 
+ * @returns 
+ */
 export function getYears() {
   // posts配下の全マークダウンファイルを取得
   const files = import.meta.glob('/src/posts/**/*.md', { eager: true });
