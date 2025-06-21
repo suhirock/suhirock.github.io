@@ -1,1 +1,0 @@
-import{f as i,a}from"./zbX7MVCN.js";import"./iWJGPTQO.js";const o={title:"SvelteKitで書き換え",description:"ブログをSvelteKitで書き換えました。",date:"2025-06-15",categories:["sveltekit","svelte"],published:!0},{title:p,description:d,date:v,categories:c,published:m}=o;var l=i("<p>SvelteKitになれる必要があったので、SvelteKitでBlogをやり直しています。</p>");function n(t){var e=l();a(t,e)}export{n as default,o as metadata};
