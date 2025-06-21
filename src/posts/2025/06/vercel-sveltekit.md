@@ -6,7 +6,7 @@ categories:
   - sveltekit
   - svelte
   - vercel
-published: draft
+published: false
 ---
 
 ## 見出しを使う
