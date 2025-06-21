@@ -1,8 +1,8 @@
-import type { Post } from '$lib/types'
-import { base } from '$app/paths'
+import { getPosts } from '$lib/api/posts'
 
-export async function load({ fetch }) {
-  const response = await fetch(`${base}/api/posts`)
-  const posts: Post[] = await response.json()
+export async function load() {
+  const posts = await getPosts()
   return { posts }
 }
+
+export const prerender = true

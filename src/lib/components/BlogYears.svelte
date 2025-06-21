@@ -1,15 +1,14 @@
 <script lang="ts">
-    import { onMount } from "svelte"
-    let data = null
-    let isLoading = true
+    import { getYears } from "$lib/api/posts"
+    import { base } from '$app/paths'
 
-    onMount(async() => {
-        const res = await fetch(`${base}/api/posts_years`)
-        data = await res.json()
-        isLoading = false
-    })
+    const years = getYears()
 </script>
 
 <ul>
-    <li>2025</li>
+    {#each years as year}
+        <li>
+            <a href="{base}/blog/{year}">{year}</a>
+        </li>
+    {/each}
 </ul>

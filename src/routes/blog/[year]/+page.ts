@@ -1,9 +1,16 @@
-import type { Post } from '$lib/types'
-import { base } from '$app/paths'
+import { getPosts, getYears } from '$lib/api/posts'
 
-export async function load({ fetch, params }) {
+export async function load({ params }) {
   const { year } = params
-  const response = await fetch(`${base}/api/posts/${year}`)
-  const posts: Post[] = await response.json()
-  return { posts }
+  const posts = await getPosts(year)
+  return { posts, year }
 }
+
+// 静的生成のために事前に生成すべきページを指定
+export async function entries() {
+  const years = getYears()
+  return years.map(year => ({ year }))
+}
+
+// 静的生成を有効にする
+export const prerender = true
