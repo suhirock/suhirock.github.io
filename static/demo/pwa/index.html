@@ -2,33 +2,99 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="PWAテスト">
+    <link rel="apple-touch-icon" href="./images/icon-192x192.png">
     <title>PWAテスト</title>
     <link rel="manifest" href="./manifest.json">
     <style>
       .wrapper{ width: 60%; margin: 20px auto; background: #eee; padding: 20px; text-align: center; }
+      .install-btn {
+        display: none;
+        margin: 20px auto;
+        padding: 12px 24px;
+        font-size: 16px;
+        background: #007aff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .install-btn:hover { background: #0056b3; }
+      .ios-guide {
+        display: none;
+        margin: 20px auto;
+        padding: 15px;
+        background: #fff3cd;
+        border-radius: 8px;
+        font-size: 14px;
+        text-align: left;
+        max-width: 300px;
+      }
+      .ios-guide p { margin: 5px 0; }
     </style>
   </head>
   <body>
     <div class="wrapper">
       <h1>PWAテスト</h1>
       <p>リンクをまとめたページをPWAする</p>
+
+      <!-- Android用インストールボタン -->
+      <button id="installBtn" class="install-btn">ホーム画面に追加</button>
+
+      <!-- iOS用案内 -->
+      <div id="iosGuide" class="ios-guide">
+        <p><strong>ホーム画面に追加する方法:</strong></p>
+        <p>1. 下部の共有ボタン（□↑）をタップ</p>
+        <p>2.「ホーム画面に追加」を選択</p>
+      </div>
+
       <ul>
         <li><a href="https://www.yahoo.co.jp/">Yahooのリンク</a></li>
         <li><a href="https://www.google.com/">Googleのリンク</a></li>
         <li><a href="https://b.hatena.ne.jp/">はてなブックマーク</a></li>
       </ul>
     </div>
-  </body>
+
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('./sw.js').then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
+      // Service Worker登録
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('SW registered:', reg.scope))
+            .catch(err => console.log('SW failed:', err));
+        });
+      }
+
+      // Android: beforeinstallprompt
+      let deferredPrompt;
+      const installBtn = document.getElementById('installBtn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'block';
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('Install outcome:', outcome);
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
+      });
+
+      // iOS判定: Safari かつ スタンドアロンでない場合に案内表示
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+      if (isIOS && !isStandalone) {
+        document.getElementById('iosGuide').style.display = 'block';
+      }
     </script>
+  </body>
 </html>
