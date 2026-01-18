@@ -1,31 +1,50 @@
 name: deploy GH Pages
 
-on: 
+on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: checkout
         uses: actions/checkout@v4
 
       - name: setup node.js
         uses: actions/setup-node@v4
-      
-      - name: setup app env
-        run: npm i
-      
-      - name: build static resources
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build
         run: npm run build
-      
-      - name: deploy to github pages
-        uses: peaceiris/actions-gh-pages@v4
+
+      - name: setup pages
+        uses: actions/configure-pages@v5
+
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.DEPLOY_TOKEN_2025 }}
-          publish_dir: build
+          path: build
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: deploy to github pages
+        id: deployment
+        uses: actions/deploy-pages@v4
