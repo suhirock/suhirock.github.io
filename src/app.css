@@ -15,3 +15,53 @@ a{
 a:hover{
     text-decoration: none;
 }
+pre{
+    display: block;
+    padding: 1.5rem;
+    line-height: 1.6;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 1.4rem;
+}
+
+/* Shiki デュアルテーマ（ライトモード） */
+pre.shiki,
+pre.shiki span {
+    color: var(--shiki-light) !important;
+    background-color: var(--shiki-light-bg) !important;
+}
+
+pre.shiki code {
+    display: block;
+    background-color: transparent !important;
+}
+
+/* ダークモード対応 */
+@media (prefers-color-scheme: dark) {
+    pre.shiki,
+    pre.shiki span {
+        color: var(--shiki-dark) !important;
+        background-color: var(--shiki-dark-bg) !important;
+    }
+}
+
+/* ファイル名表示 */
+pre.shiki[data-title] {
+    position: relative;
+    padding-top: 3.5rem;
+}
+
+pre.shiki[data-title]::before {
+    content: attr(data-title);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem 1.5rem;
+    font-size: 1.2rem;
+    font-family: sans-serif;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px 10px 0 0;
+    color: #ccc;
+}

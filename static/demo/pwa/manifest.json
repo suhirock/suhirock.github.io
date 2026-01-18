@@ -1,0 +1,18 @@
+{
+  "short_name": "DemoPage",
+  "name": "Demo page of PWA",
+  "icons": [
+    {
+      "src":"/demo/pwa/images/icon-512x512.png",
+      "sizes":"512x512",
+      "type": "image/png"
+    },
+    {
+      "src":"/demo/pwa/images/icon-192x192.png",
+      "sizes":"192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone"
+}
