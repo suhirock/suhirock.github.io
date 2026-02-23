@@ -18,7 +18,7 @@ export async function getPosts(year?: string) {
             const metadata = file.metadata as Omit<Post, 'slug'>;
             const post = { ...metadata, slug } satisfies Post;
             if (!year || new Date(post.date).getFullYear() === Number(year)) {
-                post.published && posts.push(post);
+                (post.published || import.meta.env.DEV) && posts.push(post);
             }
         }
     }
