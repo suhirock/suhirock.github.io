@@ -1,6 +1,7 @@
 <script lang="ts">
 import { formatDate } from "$lib/utils"
 import { base } from '$app/paths'
+import { dev } from '$app/environment'
 export let data
 </script>
 
@@ -9,6 +10,12 @@ export let data
   <meta property="og:type" content="article" />
   <meta property="og:title" content={data.meta.title} />
 </svelte:head>
+
+{#if dev && !data.meta.published}
+  <div class="bg-yellow-500 text-black text-center py-2 font-bold">
+    ドラフト記事です
+  </div>
+{/if}
 
 <article class="mt-20">
   <hgroup>

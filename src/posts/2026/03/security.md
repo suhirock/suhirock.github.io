@@ -26,8 +26,9 @@ editがつくと、正規表現でURLやパスの指定などを行います。
 <br>
 
 ## X-Frame-Options
-クリックジャッキングへの対応  
-クリックジャッキングとは
+クリックジャッキングを防ぐためのものです。クリックジャッキングとはWebページに透明なiframeを重ね、ユーザーが意図しないボタンやリンクを無意識にクリックさせ、意図しない操作（購入、退会、情報公開など）を実行させるサイバー攻撃です。
+
+例えば *X-Frame-Options* を *SAMEORIGIN* にすると
 
 ApacheでSAMEORIGINに設定する場合  
 ```
@@ -73,7 +74,8 @@ Header set X-Content-Type-Options "nosniff"
 
 httpsを強制するヘッダーです。  
 
-
+```
 <IfModule mod_headers.c>
 Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 </IfModule>
+```

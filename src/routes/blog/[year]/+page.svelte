@@ -21,7 +21,6 @@ export let data
         </h2>
         <p class="text-gray-600 text-s mb-4">
           {formatDate(post.date)}
-          {getDate(post.date)}
         </p>
         <p class="description">{post.description}</p>
       </li>
