@@ -1,10 +1,10 @@
 ---
 title: 4月がはじまった
 description: 4月のはじまりは雨だった
-date: '2026-04-02'
+date: '2026-04-03'
 categories:
   - 日記
-published: false
+published: true
 ---
 
 3月終わりから4月にかけて、あった出来事についてちょっと考えを整理。
