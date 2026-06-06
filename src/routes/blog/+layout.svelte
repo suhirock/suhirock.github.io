@@ -5,6 +5,7 @@
 </script>
 
 <aside>
+    <p>アーカイブ</p>
     <ul>
         {#each data.archiveYears as year}
             <li>
@@ -12,5 +13,23 @@
             </li>
         {/each}
     </ul>
+
+    <p>カテゴリー</p>
+    <ul>
+        {#each data.categories as category}
+            <li>
+                <a href={`${base}/blog/category/${encodeURIComponent(category.name)}`}>
+                    {category.name} ({category.count})
+                </a>
+            </li>
+        {/each}
+    </ul>
 </aside>
 <slot />
+
+<style>
+ul{
+    display: flex;
+    gap: 20px;
+}
+</style>

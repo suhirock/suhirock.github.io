@@ -1,4 +1,4 @@
-export type Categories = 'sveltekit' | 'svelte'
+export type Categories = string
 
 export type Post = {
     title: string,
@@ -7,4 +7,9 @@ export type Post = {
     date: string,
     categories: Categories[],
     published: boolean,
+}
+
+export type Category = {
+    name: string,
+    count: number,
 }
