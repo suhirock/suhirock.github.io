@@ -1,0 +1,60 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+}
+
+.slide.visible {
+  opacity: 1;
+}
+
+/* handles the slow continuous zoom-in (Ken Burns), restarted per slide via JS */
+.zoom-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+  animation: kenburns var(--slide-duration, 8s) linear forwards;
+}
+
+/* handles the irregular heartbeat pulse, triggered by JS adding/removing .beat */
+.pulse-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.03);
+  transform-origin: center center;
+}
+
+.pulse-layer.beat {
+  animation: heartbeat 0.4s ease-in-out;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.18); }
+}
+
+/* minimum scale here must stay at 1 (never below) so the image always fully covers the screen */
+@keyframes heartbeat {
+  0%   { transform: scale(1.03); filter: brightness(1); }
+  30%  { transform: scale(1);    filter: brightness(0.93); }
+  45%  { transform: scale(1.03); filter: brightness(1); }
+  65%  { transform: scale(1);    filter: brightness(0.92); }
+  100% { transform: scale(1.03); filter: brightness(1); }
+}
