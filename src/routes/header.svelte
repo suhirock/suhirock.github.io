@@ -5,7 +5,7 @@
 
 <h1>LOGデナシ</h1>
 
-<nav>
+<nav class="mb-5">
 <a href="{base}/">Home</a>
 <a href="{base}/blog">Blog</a>
 </nav>

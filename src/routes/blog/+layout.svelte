@@ -6,7 +6,7 @@
 
 <aside>
     <p>アーカイブ</p>
-    <ul>
+    <ul class="flex flex-wrap gap-x-4 mb-5">
         {#each data.archiveYears as year}
             <li>
                 <a href={`${base}/blog/${year}`}>{year}</a>
@@ -15,7 +15,7 @@
     </ul>
 
     <p>カテゴリー</p>
-    <ul>
+    <ul class="flex flex-wrap gap-x-4 mb-10">
         {#each data.categories as category}
             <li>
                 <a href={`${base}/blog/category/${encodeURIComponent(category.name)}`}>
@@ -26,10 +26,3 @@
     </ul>
 </aside>
 <slot />
-
-<style>
-ul{
-    display: flex;
-    gap: 20px;
-}
-</style>
